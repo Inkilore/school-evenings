@@ -7,7 +7,7 @@ import (
 )
 
 type CourseService interface {
-	CreateCourse(title, description string, maxListeners int, expiration, from, to time.Time, timetable []time.Time) (*entity.Course, error)
+	CreateCourse(title, description string, left int, expiration, from, to time.Time, timetable string) (*entity.Course, error)
 	UpdateCourse(id uint, title, description string, archive bool) (*entity.Course, error)
 	FetchCourses(limit int) (*[]entity.Course, error)
 	GetCourseById(id uint) (*entity.Course, error)
@@ -23,8 +23,8 @@ func NewCourseService(r repo.CourseRepo) CourseService {
 	}
 }
 
-func (s *courseService) CreateCourse(title, description string, maxListeners int, expiration, from, to time.Time, timetable []time.Time) (*entity.Course, error) {
-	return s.repo.CreateCourse(title, description, maxListeners, expiration, from, to, timetable)
+func (s *courseService) CreateCourse(title, description string, left int, expiration, from, to time.Time, timetable string) (*entity.Course, error) {
+	return s.repo.CreateCourse(title, description, left, expiration, from, to, timetable)
 }
 
 func (s *courseService) UpdateCourse(id uint, title, description string, archive bool) (*entity.Course, error) {

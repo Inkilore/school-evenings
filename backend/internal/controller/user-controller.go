@@ -35,7 +35,7 @@ func CreateUser(service rule.UserService) fiber.Handler {
 		t, err := token.SignedString([]byte("secret"))
 
 		ctx.Status(http.StatusOK)
-		return ctx.JSON(presenter.SuccessRequest(map[interface{}]interface{}{
+		return ctx.JSON(presenter.SuccessRequest(map[string]interface{}{
 			"user": res,
 			"jwt":  t,
 		}))

@@ -9,36 +9,16 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetCourses(service rule.CourseService) fiber.Handler {
+func EnrollUser(service rule.RegistryService) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		var limit gateway.GetCourses
-		err := ctx.BodyParser(&limit)
-		if err != nil {
-			ctx.Status(http.StatusBadRequest)
-			return ctx.JSON(presenter.BadResponse)
-		}
-
-		res, err := service.FetchCourses(limit.Limit)
-		if err != nil {
-			ctx.Status(http.StatusBadRequest)
-			return ctx.JSON(presenter.BadResponse)
-		}
-
-		ctx.Status(http.StatusOK)
-		return ctx.JSON(presenter.SuccessRequest(res))
-	}
-}
-
-func CreateCourse(service rule.CourseService) fiber.Handler {
-	return func(ctx *fiber.Ctx) error {
-		var params gateway.CreateCourse
+		var params gateway.EnrollUserRegistry
 		err := ctx.BodyParser(&params)
 		if err != nil {
 			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenter.BadResponse)
 		}
 
-		res, err := service.CreateCourse(params.Title, params.Description, params.Left, params.Expiration, params.From, params.To, params.Timetable)
+		res, err := service.EnrollUser(params.UserId, params.CourseId)
 		if err != nil {
 			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenter.BadResponse)
@@ -49,16 +29,16 @@ func CreateCourse(service rule.CourseService) fiber.Handler {
 	}
 }
 
-func GetCourseById(service rule.CourseService) fiber.Handler {
+func ConfirmEnrollship(service rule.RegistryService) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		var id gateway.GetCourseById
-		err := ctx.BodyParser(&id)
+		var params gateway.EnrollUserRegistry
+		err := ctx.BodyParser(&params)
 		if err != nil {
 			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenter.BadResponse)
 		}
 
-		res, err := service.GetCourseById(id.Id)
+		res, err := service.ConfirmEnrollship(params.UserId, params.CourseId)
 		if err != nil {
 			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenter.BadResponse)
@@ -66,5 +46,23 @@ func GetCourseById(service rule.CourseService) fiber.Handler {
 
 		ctx.Status(http.StatusOK)
 		return ctx.JSON(presenter.SuccessRequest(res))
+	}
+}
+
+func UploadFile(service rule.RegistryService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		file, err := ctx.FormFile("upload")
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return ctx.JSON(presenter.BadResponse)
+		}
+
+		if err = ctx.SaveFile(file, "../../uploads/"+file.Filename); err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return ctx.JSON(presenter.BadResponse)
+		}
+
+		ctx.Status(http.StatusOK)
+		return ctx.JSON(presenter.SuccessRequest("message: file written successfuly"))
 	}
 }

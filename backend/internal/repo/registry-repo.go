@@ -28,7 +28,9 @@ func (r *registryRepo) EnrollUser(userId, courseId uint) (*entity.Registry, erro
 		return nil, res.Error
 	}
 
-	if course.MaxListeners
+	if course.Left < 1 {
+		registry.Reserve = true
+	}
 
 	res = r.store.Create(registry)
 	if res.Error != nil {

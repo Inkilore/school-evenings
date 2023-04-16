@@ -8,7 +8,7 @@ import (
 )
 
 type CourseRepo interface {
-	CreateCourse(title, description string, maxListeners int, expiration, from, to time.Time, timetable []time.Time) (*entity.Course, error)
+	CreateCourse(title, description string, left int, expiration, from, to time.Time, timetable string) (*entity.Course, error)
 	UpdateCourse(id uint, title, description string, archive bool) (*entity.Course, error)
 	FetchCourses(limit int) (*[]entity.Course, error)
 	GetCourseById(id uint) (*entity.Course, error)
@@ -20,8 +20,8 @@ func NewCourseRepo(db *gorm.DB) CourseRepo {
 	}
 }
 
-func (r *courseRepo) CreateCourse(title, description string, maxListeners int, expiration, from, to time.Time, timetable []time.Time) (*entity.Course, error) {
-	course := entity.NewCourse(title, description, maxListeners, expiration, from, to, timetable)
+func (r *courseRepo) CreateCourse(title, description string, left int, expiration, from, to time.Time, timetable string) (*entity.Course, error) {
+	course := entity.NewCourse(title, description, left, expiration, from, to, timetable)
 	res := r.store.Create(course)
 
 	if res.Error != nil {

@@ -1,6 +1,9 @@
 package rule
 
-import "backend/internal/entity"
+import (
+	"backend/internal/entity"
+	"backend/internal/repo"
+)
 
 type RegistryService interface {
 	EnrollUser(userId, courseId uint) (*entity.Registry, error)

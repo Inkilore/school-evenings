@@ -1,9 +1,15 @@
 package router
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"backend/internal/controller"
+	"backend/internal/middleware"
+	"backend/internal/rule"
 
-func registryRouter(app *fiber.App, service rule.Registry) {
-	// app.Post("/user/login", controller.Login(service))
-	// app.Post("user/create", controller.CreateUser(service))
-	// app.Put("/user/update", middleware.Protected())
+	"github.com/gofiber/fiber/v2"
+)
+
+func registryRouter(app *fiber.App, service rule.RegistryService) {
+	app.Post("/registry/enroll", middleware.Protected(), controller.EnrollUser(service))
+	app.Put("/registry/confirmEnrollship", middleware.Protected(), controller.ConfirmEnrollship(service))
+	app.Post("/upload", middleware.Protected(), controller.UploadFile(service))
 }

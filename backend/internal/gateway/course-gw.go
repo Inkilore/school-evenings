@@ -7,13 +7,13 @@ type GetCourses struct {
 }
 
 type CreateCourse struct {
-	Title        string `json:"title"`
-	Description  string `json:"description"`
-	MaxListeners int    `json:"max_listeners"`
-	Expiration   time.Time
-	From         time.Time
-	To           time.Time
-	Timetable    []time.Time
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Left        int       `json:"left"`
+	Expiration  time.Time `json:"expiration"`
+	From        time.Time `json:"from"`
+	To          time.Time `json:"to"`
+	Timetable   string    `json:"timetable"`
 }
 
 type GetCourseById struct {

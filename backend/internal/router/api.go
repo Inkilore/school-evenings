@@ -8,6 +8,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 func Api() {
@@ -25,6 +26,9 @@ func Api() {
 
 	app := fiber.New()
 	app.Use(cors.New())
+	app.Use(logger.New())
+	// app.Settings.BodyLimit = 10 * 1024 * 1024 // 10MB in bytes
+	app.Server().MaxRequestBodySize = 10 * 1024 * 1024
 
 	courseRouter(app, courseService)
 	userRouter(app, userService)
